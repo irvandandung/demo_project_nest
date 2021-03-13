@@ -1,4 +1,5 @@
 export class InsertUserDto {
+	readonly uuid : string;
 	readonly name : string;
 	readonly username: string;
 	readonly email: string;

@@ -12,4 +12,18 @@ export class UsersService {
 	findAll() : User[]{
 		return this.users;
 	}
+
+	findOne(uuid: string): User{
+		return this.users.find(User => User.uuid === uuid);
+	}
+
+	update(uuid: string, User : User){
+		let indexUser = this.users.findIndex(User => User.uuid === uuid);
+		this.users[indexUser] = User;
+	}
+
+	delete(uuid: string){
+		let indexUser = this.users.findIndex(User => User.uuid === uuid);
+		this.users.splice(indexUser, 1);
+	}
 }
