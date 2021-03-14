@@ -1,6 +1,7 @@
 //import modul
 import { ConfigModule } from './config/config.module';
 import { Module, NestModule, MiddlewareConsumer, RequestMethod } from '@nestjs/common';
+import { MongooseModule } from '@nestjs/mongoose';
 import { ProductsModule } from './products/products.module';
 import { UsersModule } from './users/users.module';
 
@@ -14,10 +15,22 @@ import { AppService } from './app.service';
 
 //import middleware
 import { AuthMiddleware } from './global/middleware/auth.middleware';
-import { ConfigService } from './config/config.service';
 
 @Module({
-  imports: [ProductsModule, UsersModule, ConfigModule],
+  imports: [
+  	ConfigModule,
+  	MongooseModule.forRoot(
+  		`mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}/test?retryWrites=true&w=majority`,
+  		{
+            useCreateIndex: true,
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+            useFindAndModify: false,
+        },
+  	),
+  	ProductsModule, 
+  	UsersModule
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
