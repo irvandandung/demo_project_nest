@@ -1,29 +1,38 @@
 import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 import { User } from './interface/user.interface';
+import { InsertUserDto } from './dto/insertUser.dto';
 
 @Injectable()
 export class UsersService {
-	private readonly users : User[] = [];
+	constructor(
+		@InjectModel('User') private userModel : Model<User>
+	){}
 
-	insert(user : User){
-		this.users.push(user);
+	async insert(insertUserDto: InsertUserDto){
+		let insertUser = new this.userModel(insertUserDto);
+		await insertUser.save();
 	}	
 
-	findAll() : User[]{
-		return this.users;
+	async findAll(): Promise<User[]> {
+		return await this.userModel.find();
 	}
 
-	findOne(uuid: string): User{
-		return this.users.find(User => User.uuid === uuid);
-	}
+	async list(
+		skip?: number,
+        limit?: number,
+        sort?: string[],
+        filter?: string,
+	) : Promise<[User[], number, number, number, string]>{
+		let query = {};
+        let cursor = this.userModel.find(query).populate('name');
+        if (skip) cursor.skip(skip);
+        if (limit) cursor.limit(limit);
+        if (sort) cursor.sort({ [sort[0]]: sort[1] });
+        const users = await cursor.exec();
+        const count = await this.userModel.countDocuments(query);
 
-	update(uuid: string, User : User){
-		let indexUser = this.users.findIndex(User => User.uuid === uuid);
-		this.users[indexUser] = User;
-	}
-
-	delete(uuid: string){
-		let indexUser = this.users.findIndex(User => User.uuid === uuid);
-		this.users.splice(indexUser, 1);
+        return [users, skip, limit, count, filter];
 	}
 }
