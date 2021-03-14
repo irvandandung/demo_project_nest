@@ -10,29 +10,26 @@ export class ProductsController {
 	@Post()
 	@HttpCode(204)
 	async create(@Body() insertProductDto : InsertProductDto){
-		this.productService.insert(insertProductDto);
-		return 'insert product success!';
+		return await this.productService.insert(insertProductDto);
 	}
 
 	@Get()
 	async findAll(): Promise<Product[]>{
-		return this.productService.findAll();
+		return await this.productService.findAll();
 	}
 
 	@Get()
-	async findOne(@Query('id') id : number): Promise<Product>{
-		return this.productService.findOne(id);
+	async findOne(@Query('id') id : string): Promise<Product>{
+		return await this.productService.findOne(id);
 	}
 
 	@Put()
-	async update(@Query('id') id : number, @Body() insertProductDto : InsertProductDto){
-		this.productService.update(id, insertProductDto);
-		return '1';
+	async update(@Query('id') id : string, @Body() insertProductDto : InsertProductDto){
+		return await this.productService.updateById(id, insertProductDto);
 	}
 
 	@Delete()
-	async delete(@Query('id') id : number){
-		this.productService.delete(id);
-		return '1';
+	async delete(@Query('id') id : string){
+		return await this.productService.deleteById(id);
 	}
 }

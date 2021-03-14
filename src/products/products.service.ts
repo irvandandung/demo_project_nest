@@ -1,31 +1,69 @@
 import { Injectable } from '@nestjs/common';
-import { Product } from './interface/product.interface';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { InsertProductDto } from './dto/insertProduct.dto';
+import { Product, nameProductEn } from './interface/product.interface';
 
 
 @Injectable()
 export class ProductsService {
-	private readonly products : Product[] = [];
+	constructor(
+		@InjectModel(nameProductEn) private productModel : Model<Product>
+	){}
 
-	insert(product: Product){
-		this.products.push(product);
+	async insert(insertProductDto: InsertProductDto) : Promise<Product>{
+		let insertProduct = new this.productModel(insertProductDto);
+		return await insertProduct.save();
+		
 	}
 
-	findAll() : Product[]{
-		return this.products;
+	async findAll() : Promise<Product[]>{
+		return await this.productModel.find();
 	}
 
-	findOne(id: number): Product{
-		return this.products.find(product => product.id === id);
+	async findOne(id : string) : Promise<Product>{
+		return await this.productModel.findById(id);
 	}
 
-	update(id: number, product : Product){
-		let indexProduct = this.products.findIndex(product => product.id === id);
-		this.products[indexProduct] = product;
+	async updateById(id : string, insertProductDto: InsertProductDto) : Promise<any>{
+		let response : any
+		this.productModel.findByIdAndUpdate(id, insertProductDto, {new : false}, (err, productUpdate, res)=>{
+			if (err) {
+				console.log(err);
+				response = err;
+			}else{
+				console.log(res)
+				response =  res;
+			}
+		});
+		return await response;
 	}
 
-	delete(id: number){
-		let indexProduct = this.products.findIndex(product => product.id === id);
-		this.products.splice(indexProduct, 1);
+	async deleteById(id: string) : Promise<any>{
+		let response : any
+		this.productModel.findByIdAndDelete(id, {} , (err, product ,res) =>{
+			if(!err) response = res;
+			console.log(err);
+		})
+		return await response;
 	}
+
+	async list(
+		skip?: number,
+        limit?: number,
+        sort?: string[],
+        filter?: string,
+	) : Promise<[Product[], number, number, number, string]>{
+		let query = {};
+        let cursor = this.productModel.find(query).populate('name');
+        if (skip) cursor.skip(skip);
+        if (limit) cursor.limit(limit);
+        if (sort) cursor.sort({ [sort[0]]: sort[1] });
+        const users = await cursor.exec();
+        const count = await this.productModel.countDocuments(query);
+
+        return [users, skip, limit, count, filter];
+	}
+
 
 }
