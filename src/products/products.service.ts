@@ -11,9 +11,10 @@ export class ProductsService {
 		@InjectModel(nameProductEn) private productModel : Model<Product>
 	){}
 
-	async insert(insertProductDto: InsertProductDto) : Promise<Product>{
-		let insertProduct = new this.productModel(insertProductDto);
-		return await insertProduct.save();
+	async insert(insertProductDto: InsertProductDto) : Promise<string>{
+		const insertProduct = new this.productModel(insertProductDto);
+		let insert = await insertProduct.save();
+		return insert.id;
 		
 	}
 
@@ -25,27 +26,14 @@ export class ProductsService {
 		return await this.productModel.findById(id);
 	}
 
-	async updateById(id : string, insertProductDto: InsertProductDto) : Promise<any>{
-		let response : any
-		this.productModel.findByIdAndUpdate(id, insertProductDto, {new : false}, (err, productUpdate, res)=>{
-			if (err) {
-				console.log(err);
-				response = err;
-			}else{
-				console.log(res)
-				response =  res;
-			}
-		});
-		return await response;
+	async updateById(id : string, insertProductDto: InsertProductDto) : Promise<string>{
+		let response = await this.productModel.findByIdAndUpdate(id, insertProductDto, {new : false, upsert : true}).exec();
+		return response.id;
 	}
 
-	async deleteById(id: string) : Promise<any>{
-		let response : any
-		this.productModel.findByIdAndDelete(id, {} , (err, product ,res) =>{
-			if(!err) response = res;
-			console.log(err);
-		})
-		return await response;
+	async deleteById(id: string) : Promise<string>{
+		let response = await this.productModel.findByIdAndDelete(id).exec();
+		return response.id;
 	}
 
 	async list(

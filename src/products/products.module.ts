@@ -10,7 +10,6 @@ import { ProductsService } from './products.service';
 
 //schema 
 import { ProductSchema } from './schema/product.schema';
-
 import { nameProductEn } from './interface/product.interface';
 
 @Module({
