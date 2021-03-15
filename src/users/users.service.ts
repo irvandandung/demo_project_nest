@@ -11,8 +11,9 @@ export class UsersService {
 	){}
 
 	async insert(insertUserDto: InsertUserDto){
-		let insertUser = new this.userModel(insertUserDto);
-		await insertUser.save();
+		const insertUser = new this.userModel(insertUserDto);
+		let insert = await insertUser.save();
+		return insert.id;
 	}	
 
 	async findAll(): Promise<User[]> {

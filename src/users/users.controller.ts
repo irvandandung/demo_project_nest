@@ -8,10 +8,9 @@ export class UsersController {
 	constructor(private usersService : UsersService){}
 
 	@Post()
-	@HttpCode(204)
 	async insert(@Body() insertUserDto : InsertUserDto){
-		this.usersService.insert(insertUserDto);
-		return 'insert user success!';
+		let idCreate = this.usersService.insert(insertUserDto);
+		return { status : 'success' , id : idCreate};
 	}
 
 	@Get()
@@ -34,20 +33,5 @@ export class UsersController {
 		);
 		return { users, skip, limit, count, filter }
 	}
-	// @Get()
-	// async findOne(@Query('uuid') uuid : string): Promise<User>{
-	// 	return this.usersService.findOne(uuid);
-	// }
 
-	// @Put()
-	// async update(@Query('uuid') uuid : string, @Body() insertUserDto : InsertUserDto){
-	// 	this.usersService.update(uuid, insertUserDto);
-	// 	return '1';
-	// }
-
-	// @Delete()
-	// async delete(@Query('uuid') uuid : string){
-	// 	this.usersService.delete(uuid);
-	// 	return '1';
-	// }
 }
