@@ -19,22 +19,11 @@ jobs:
           paths:
             - .
 
-  test:
-    docker:
-      - image: cimg/node:current
-    steps:
-      - attach_workspace:
-          at: .
-      - run:
-          name: Test
-          command: npm test
-
 workflows:
   version: 2
   heroku_deploy:
     jobs:
       - build
-      - test:
+      - heroku/deploy-via-git:
           requires:
             - build
-      - heroku/deploy-via-git
