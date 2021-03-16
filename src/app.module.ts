@@ -37,7 +37,10 @@ import { AuthModule } from './auth/auth.module';
   	ProductsModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    AuthMiddleware
+  ],
 })
 export class AppModule {
 	configure(consumer: MiddlewareConsumer) {

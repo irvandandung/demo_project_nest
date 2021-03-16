@@ -41,8 +41,7 @@ export class AdminsService {
 			actorModel : UserType.ADMIN,
 		}
         const response = await this.authService.login(payload);
-        console.log(response);
-		return response;
+		return { response, admin };
 	}
 
 	async list(

@@ -22,10 +22,19 @@ export class AuthService {
             actor: payload.actor,
             actorModel: UserType.getModel(payload.actorModel),
         };
-        return saveToken;
-        // const newItem = new this.authModel(saveToken);
-        // const result = newItem.save();
-        // return result;
+        const newItem = new this.authModel(saveToken);
+        const result = newItem.save();
+        return result;
+    }
+
+    //verify token
+    async verify(accessToken: string) {
+        return this.jwtService.verify(accessToken);
+    }
+
+    //find by token
+    async findByToken(accessToken: string): Promise<Auth> {
+        return this.authModel.findOne({ accessToken: accessToken }).exec();
     }
 
     generateToken(payload: any = {}): [string, string] {
