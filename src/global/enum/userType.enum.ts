@@ -1,4 +1,4 @@
-const UserEnum = ['ADMIN', 'USER'];
+const UserEnum = ['Admin', 'User'];
 class UserType {
     static ADMIN: string = 'ADMIN';
     static USER: string = 'USER';
