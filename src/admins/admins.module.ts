@@ -16,6 +16,7 @@ import { nameAdminEntity } from './interface/admin.interface'
 		AuthModule,
 	],
 	controllers : [AdminsController],
-	providers : [AdminsService]
+	providers : [AdminsService],
+	exports : [AdminsService]
 })
 export class AdminsModule {}
