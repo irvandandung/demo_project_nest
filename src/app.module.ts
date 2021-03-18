@@ -17,6 +17,7 @@ import { AppService } from './app.service';
 //import middleware
 import { AuthMiddleware } from './global/middleware/auth.middleware';
 import { AuthModule } from './auth/auth.module';
+import { OrdersModule } from './orders/orders.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { AuthModule } from './auth/auth.module';
     AdminsModule,
     UsersModule,
   	ProductsModule,
+  	OrdersModule,
   ],
   controllers: [AppController],
   providers: [
