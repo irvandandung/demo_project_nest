@@ -1,0 +1,42 @@
+FROM node:alpine
+
+WORKDIR /app
+
+COPY . .
+
+ARG DEF_APP_PORT=5321
+
+ARG DEF_DB_HOST
+
+ARG DEF_DB_NAME=test
+
+ARG DEF_DB_PASSWORD
+
+ARG DEF_DB_USERNAME
+
+ARG DEF_JWT_SECRET
+
+ARG DEF_JWT_REFRESH_TTL=60d
+
+ARG DEF_JWT_TTL=2h
+
+ENV APP_PORT=${DEF_APP_PORT} \
+    DB_HOST=${DEF_DB_HOST} \
+    DB_NAME=${DEF_DB_NAME} \
+    DB_PASSWORD=${DEF_DB_PASSWORD} \
+    DB_USERNAME=${DEF_DB_USERNAME} \
+    JWT_SECRET=${DEF_JWT_SECRET} \
+    JWT_REFRESH_TTL=${DEF_JWT_REFRESH_TTL} \
+    JWT_TTL=${DEF_JWT_TTL}
+
+RUN echo "APP_PORT = ${APP_PORT}" \
+    echo "DB_HOST = ${DB_HOST}" \
+    echo "DB_NAME = ${DB_NAME}" \
+    echo "DB_PASSWORD = ${DB_PASSWORD}" \
+    echo "DB_USERNAME = ${DB_USERNAME}"
+
+RUN npm config set registry http://registry.npmjs.org
+
+RUN npm install
+
+CMD ["npm", "run", "start"]
