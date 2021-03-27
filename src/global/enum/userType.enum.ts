@@ -2,7 +2,6 @@ const UserEnum = ['Admin', 'User'];
 class UserType {
     static ADMIN: string = 'ADMIN';
     static USER: string = 'USER';
-    static COMPANIES: string = 'COMPANIES';
 
     static getStr(en: string): string {
         switch (en) {
