@@ -6,4 +6,4 @@ interface Auth extends Document {
   email: string;
 }
 
-export { authNameEntity, Auth }
+export { authNameEntity, Auth };

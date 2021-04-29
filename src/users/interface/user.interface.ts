@@ -1,7 +1,7 @@
 import { Document } from 'mongoose';
 export interface User extends Document {
-	readonly name : string;
-	readonly email: string;
-	readonly phoneNumber: string;
-	password: string;
+  readonly name: string;
+  readonly email: string;
+  readonly phoneNumber: string;
+  password: string;
 }

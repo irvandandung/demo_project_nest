@@ -6,15 +6,18 @@ import { AuthSchema } from './schema/auth.schema';
 import { AuthService } from './auth.service';
 import { authNameEntity } from './interface/jwt.interface';
 
-const passportModule = PassportModule.register({ defaultStrategy: 'jwt', session: false });
+const passportModule = PassportModule.register({
+  defaultStrategy: 'jwt',
+  session: false,
+});
 @Injectable()
 @Module({
-	imports: [
-        passportModule,
-        MongooseModule.forFeature([{ name: authNameEntity, schema: AuthSchema }]),
-        JwtModule.register({ secret: process.env.JWT_SECRET }),
-    ],
-    providers: [AuthService],
-    exports: [AuthService ,passportModule],
+  imports: [
+    passportModule,
+    MongooseModule.forFeature([{ name: authNameEntity, schema: AuthSchema }]),
+    JwtModule.register({ secret: process.env.JWT_SECRET }),
+  ],
+  providers: [AuthService],
+  exports: [AuthService, passportModule],
 })
 export class AuthModule {}

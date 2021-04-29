@@ -1,6 +1,6 @@
 //import modul
 import { ConfigModule } from './config/config.module';
-import { Module, NestModule, MiddlewareConsumer, RequestMethod } from '@nestjs/common';
+import { Module, MiddlewareConsumer, RequestMethod } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AdminsModule } from './admins/admins.module';
 import { UsersModule } from './users/users.module';
@@ -21,34 +21,30 @@ import { OrdersModule } from './orders/orders.module';
 
 @Module({
   imports: [
-  	ConfigModule,
-  	MongooseModule.forRoot(
-  		`mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}/test?retryWrites=true&w=majority`,
-      // `mongodb://localhost/simalakama`,
-  		{
-            useCreateIndex: true,
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-            useFindAndModify: false,
-        },
-  	),
+    ConfigModule,
+    MongooseModule.forRoot(
+      `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}/${process.env.DB_NAME}?retryWrites=true&w=majority`,
+      {
+        useCreateIndex: true,
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        useFindAndModify: false,
+      },
+    ),
     AuthModule,
     AdminsModule,
     UsersModule,
-  	ProductsModule,
-  	OrdersModule,
+    ProductsModule,
+    OrdersModule,
   ],
   controllers: [AppController],
-  providers: [
-    AppService,
-    AuthMiddleware
-  ],
+  providers: [AppService, AuthMiddleware],
 })
 export class AppModule {
-	configure(consumer: MiddlewareConsumer) {
-	    consumer
-	      .apply(AuthMiddleware)
-	      .exclude({path: 'users', method: RequestMethod.POST})
-	      .forRoutes(ProductsController, UsersController);
-  	}
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(AuthMiddleware)
+      .exclude({ path: 'users', method: RequestMethod.POST })
+      .forRoutes(ProductsController, UsersController);
+  }
 }
