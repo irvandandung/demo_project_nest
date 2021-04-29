@@ -56,4 +56,9 @@ export class ProductsController {
       throw new InternalServerErrorException('error, data not Updated!');
     return { status: 'success', id: idDel };
   }
+
+  @Get('amountpercategory')
+  async getGroupAmountById() {
+    return await this.productService.getGroupAmountByCategory();
+  }
 }

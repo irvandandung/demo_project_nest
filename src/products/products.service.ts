@@ -55,4 +55,21 @@ export class ProductsService {
 
     return [users, skip, limit, count, filter];
   }
+
+  async getGroupAmountByCategory() {
+    const cursor = this.productModel.aggregate([
+      {
+        $group: {
+          _id: '$category',
+          totalAmount: {
+            $sum: '$price',
+          },
+        },
+      },
+    ]);
+
+    const amounts = await cursor.exec();
+
+    return amounts;
+  }
 }
