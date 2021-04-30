@@ -21,6 +21,7 @@ import { UserType } from 'src/global/enum/userType.enum';
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
+  @UserTypes(UserType.ADMIN)
   @Post()
   async insert(@Body() insertUserDto: InsertUserDto) {
     const idCreate = this.usersService.insert(insertUserDto);
